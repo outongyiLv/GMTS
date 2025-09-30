@@ -7,4 +7,3 @@ This repo contains two sub-frameworks, one is based on [VERL](https://github.com
 - `GMTS-Framework1/` → **GRPO-Zero-GMTS**
 - `GMTS-Framework2/` → **VERL-GMTS**
 
-Wherever this README says *framework1*, it means `GMTS1/`; *framework2* means `GMTS2/`.
