@@ -7,3 +7,4 @@ This repo contains two sub-frameworks, one is based on [VERL](https://github.com
 - `GMTS-Framework1/` → **GRPO-Zero-GMTS**
 - `GMTS-Framework2/` → **VERL-GMTS**
 
+We provide **GMTS-Framework1/** for resource-constrained setups: **it does not require VLLM**, and it can train/test **1.5B and 7B** models with minimal resources, with a simple, easy-to-implement KV-cache.
