@@ -12,5 +12,4 @@ We provide **GMTS-Framework1/** for resource-constrained setups: **it does not r
 ## Quick Start
 
 ```python
-# from the project root
 mkdir -p GMTS1 GMTS2
