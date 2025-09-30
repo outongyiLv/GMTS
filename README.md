@@ -13,5 +13,11 @@ We gave the example for training DAPO/GRPO for `GMTS-Framework1/`, and training 
 
 ```bash
 cd GMTS-Framework1/
+# training for dapo on Qwen2.5-math-1.5b
+bash example/Qwen2.5-math-1.5b-dapo.yaml
+# training for grpo on  Qwen2.5-math-1.5b
+bash example/Qwen2.5-math-1.5b-grpo.yaml
+
+
 
 
