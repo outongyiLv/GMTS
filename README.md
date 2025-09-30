@@ -12,4 +12,5 @@ We provide **GMTS-Framework1/** for resource-constrained setups: **it does not r
 We gave the example for training DAPO/GRPO for `GMTS-Framework1/`, and training DAPO for `GMTS-Framework2/`
 
 ```python
-mkdir -p GMTS1 GMTS2
+cd GMTS-Framework1/
+
