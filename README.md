@@ -17,7 +17,3 @@ cd GMTS-Framework1/
 bash example/Qwen2.5-math-1.5b-dapo.yaml
 # training for grpo on  Qwen2.5-math-1.5b
 bash example/Qwen2.5-math-1.5b-grpo.yaml
-
-
-
-
