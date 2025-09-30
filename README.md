@@ -1,9 +1,9 @@
 # GMTS
 GMTS: GRADIENT MAGNITUDE-BASED TOKEN SELECTION IMPROVES RLVR TRAINING FOR LLM REASONING
 
-## GMTS Frameworks contains two sub-frameworks, one is based on verl and one is based on GRPO-Zero
+## GMTS Frameworks 
 
-This repo contains two sub-frameworks:
+This repo contains two sub-frameworks, one is based on verl and one is based on GRPO-Zero:
 - `GMTS1/` → **framework1**
 - `GMTS2/` → **framework2**
 
