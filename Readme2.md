@@ -195,7 +195,11 @@ We do the GTMS and ETS main part in verl/workers/actor/dp_actor.py, update_polic
 
 ```
 
+## 🚀 Start
 
+```bash
+bash examples/dapo_trainer/run_qwen3_8b_qwa.sh
+```
 
 
 
