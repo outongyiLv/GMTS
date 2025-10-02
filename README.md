@@ -24,7 +24,7 @@
 git clone https://github.com/outongyiLv/GMTS.git
 conda create -n GMTS python=3.10 -y
 conda activate GMTS
-cd GMTS
+cd GMTS/GMTS-Framework1
 pip install -r requirements.txt
 
 
