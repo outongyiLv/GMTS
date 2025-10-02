@@ -20,6 +20,9 @@
 > There are **no strict constraints** on CUDA or package versions; choose a PyTorch build compatible with your system.
 
 ```bash
+
+https://github.com/xiaolizh1/KTAE.git
+
 # Create and activate a virtual environment
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
