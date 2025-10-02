@@ -34,6 +34,8 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ```
 #### ⚙️ Common Arguments & Meanings
 > You can customize your own training; the specific parameters in **.yaml** are as follows:
+
+
 | 参数名 | 类型(默认) | 说明 |
 |---|---|---|
 | `--model_name_or_path` | str | 基座模型（HF 模型名或本地路径），如 `Qwen/Qwen2.5-Math-1.5B` |
