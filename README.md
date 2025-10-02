@@ -76,39 +76,37 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 | `random_seed` | `0` | int | Global seed for training. |
 | `max_prompt_len` | `1024` | int | Max input prompt tokens. |
 | `max_gen_len` | `2048` | int | Max generated output tokens per sample. |
-| `batch_size` | `1024` | int | Global training dataset number Group number is `batch_size`//`num_questions_per_batch`. |
-| `num_questions_per_batch` | `64` | int | Number of questions per **outer step** (scheduler unit). |
-
-
-| `rollout_mini_batch` | `16` | int | Questions per rollout chunk (sampling/inference chunk size). |
-| `mini_batch_size` | `64` | int | Questions per **update** chunk (optimizer update granularity). |
+| `batch_size` | `1024` | int | Global training dataset number **Group number** is `batch_size`//`num_questions_per_batch`. |
+| `num_questions_per_batch` | `64` | int | Number of questions per step. |
+| `rollout_mini_batch` | `16` | int | Questions per rollout chunk. |
+| `mini_batch_size` | `64` | int | Questions per **update** chunk. |
 | `micro_batch_size` | `4` | int | Per-GPU micro-batch size for gradient accumulation. |
-| `kl_beta` | `0.001` | float | KL coefficient (strength of policy vs. reference regularization). |
+| `kl_beta` | `0.001` | float | KL coefficient. |
 | `learning_rate` | `3.0e-5` | float | Optimizer learning rate. |
 | `ckpt_dir` | `./GMTS/GMTS-Framework1/result/ckpt_dir/Qwen2.5-math-1.5b-dapo` | str | Directory to save checkpoints. |
 | `log_dir` | `./GMTS/GMTS-Framework1/result/log_dir/Qwen2.5-math-1.5b-dapo` | str | Directory to write training logs/metrics. |
-| `save_logp_gradient_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for estimated logp/gradient statistics. |
-| `save_true_gradient_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for **true** gradient magnitudes (if computed). |
-| `save_entrpy_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for entropy logs (note: field name spells `entrpy`). |
-| `save_mask_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for token masks used in analysis. |
-| `save_adv_pth` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for advantage arrays (note: field name spells `pth`). |
-| `save_prefix_pth` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for prefix information (if applicable). |
-| `save_ids_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Dump path for example/token IDs. |
+| `save_logp_gradient_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving logp-gradient magnitude. |
+| `save_true_gradient_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving true-gradient magnitude. |
+| `save_entrpy_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving entropy. |
+| `save_mask_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving each token's mask. |
+| `save_adv_pth` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving advantage. |
+| `save_prefix_pth` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving prefix information. |
+| `save_ids_path` | `./GMTS/.../gradient_dir/Qwen2.5-math-1.5b-dapo/` | str | Directory for saving token IDs. |
 | `ckpt_save_interval` | `200` | int | Save a checkpoint every N training steps. |
-| `gradient_interval` | `100` | int | Write gradient-related dumps every N steps. |
+| `gradient_interval` | `100` | int | Write gradient and gradient information every N steps. |
 | `eval_interval` | `10` | int | Run evaluation every N steps. |
 | `max_grad_norm` | `1.0` | float | Gradient clipping threshold (L2 norm). |
 | `weight_decay` | `0.0` | float | L2 weight decay coefficient. |
-| `betas` | `[0.9, 0.999]` | list[float] | Adam/AdamW momentum coefficients. |
+| `betas` | `[0.9, 0.999]` | list[float] | AdamW momentum coefficients. |
 | `memory_efficient_adamw` | `false` | bool | Use a memory-optimized AdamW if supported. |
-| `clip_ratio_low` | `0.20` | float | Lower clipping/selection ratio for token selection (GMTS). |
-| `clip_ratio_high` | `0.28` | float | Upper clipping/selection ratio for token selection (GMTS). |
-| `use_entropy` | `false` | bool | Whether to include entropy-based selection/regularization. |
-| `selected_percent` | `0.0` | float | Explicit selection percentage (overrides defaults if used). |
-| `use_TES_method` | `false` | bool | Toggle TES method (token-entropy selection) for ablations. |
-| `use_GMTS_method` | `false` | bool | Toggle GMTS method (gradient-magnitude token selection). |
-| `read_model_path` | `""` | str | Load weights from a specific checkpoint before training (resume/warm-start). |
-| `doing_inverse` | `false` | bool | Enable **inverse** experiments (e.g., bottom-selection). |
-| `use_filter` | `false` | bool | Apply filtering on tokens/samples before selection. |
+| `clip_ratio_low` | `0.20` | float | Lower ratio bound. |
+| `clip_ratio_high` | `0.28` | float | Upper ratio bound. |
+| `use_entropy` | `false` | bool | Whether to use **ETS**/**GMTS**. |
+| `selected_percent` | `0.0` | float | Selected ratio for **ETS**/**GMTS**. |
+| `use_TES_method` | `false` | bool  | Whether to use **ETS**. |
+| `use_GMTS_method` | `false` | bool | Whether to use **GMTS**. |
+| `read_model_path` | `""` | str | Load weights from a specific checkpoint before training. |
+| `doing_inverse` | `false` | bool | Whether doing bottom selection. |
+| `use_filter` | `false` | bool | Apply filtering on samples before training (Used for DAPO). |
 
 ---
