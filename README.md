@@ -107,6 +107,6 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 | `use_GMTS_method` | `false` | bool | Whether to use **GMTS**. |
 | `read_model_path` | `""` | str | Load weights from a specific checkpoint before training. |
 | `doing_inverse` | `false` | bool | Whether doing bottom selection. |
-| `use_filter` | `false` | bool | Apply filtering on samples before training (Used for DAPO). |
+| `use_filter` | `false` | bool | Apply filtering on samples before training. |
 
 ---
