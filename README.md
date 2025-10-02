@@ -43,8 +43,8 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 | `pretrained_model_path` | `./GMTS/model/Qwen2.5-Math-1.5B` | str | Path or HF identifier of the base model to train for RLVR. |
 | `device` | `cuda:0` | str | Primary compute device for the **policy/current** model. |
 | `dtype` | `bfloat16` | str | Compute dtype for model weights/forward. |
-| `old_model_device` | `cuda:0` | str | Device for the old model (can be the same as `device` if memory allows). |
-| `ref_model_device` | `cuda:0` | str | Device for the **reference** model used in KL for GRPO (can be the same as `device` if memory allows). |
+| `old_model_device` | `cuda:0` | str | Device for the old model. |
+| `ref_model_device` | `cuda:0` | str | Device for the **reference** model used in KL for GRPO. |
 
 ##### 📚 `data` section
 
