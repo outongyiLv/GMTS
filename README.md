@@ -13,7 +13,7 @@
 > ⚠️ As the framework omits parallelization, **its throughput is lower than verl**. It is best suited for prototype exploration, ablation studies, and quick feasibility checks under resource constraints.
 ---
 
-## 🚀 Quick Start
+## 🚀 Start
 
 ### 1) Environment Setup
 
@@ -110,3 +110,9 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 | `use_filter` | `false` | bool | Apply filtering on samples before training. |
 
 ---
+
+### 3) Evaluation
+```bash
+cd GMTS/GMTS-Framework1
+python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
+```
