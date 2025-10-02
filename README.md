@@ -40,7 +40,7 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ##### 🔧 `model` section
 
 | Key | Example | Type | Description |
-|---|---|---:|---|
+|:---:|:---:|:---:|:---:|
 | `pretrained_model_path` | `./GMTS/model/Qwen2.5-Math-1.5B` | str | Path or HF identifier of the base model to train for RLVR. |
 | `device` | `cuda:0` | str | Primary compute device for the **policy/current** model. |
 | `dtype` | `bfloat16` | str | Compute dtype for model weights/forward. |
@@ -52,7 +52,7 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ##### 📚 `data` section
 
 | Key | Example | Type | Description |
-|---|---|---:|---|
+|:---:|:---:|:---:|:---:|
 | `data_name` | `math` | str | Dataset used for routing or logging. |
 | `training_path` | `./GMTS/GMTS-Framework1/test_data/math-500` | str | Directory or file path to training data. |
 | `testing_path` | `./GMTS/GMTS-Framework1/test_data/math-500` | str | Directory or file path to testing data. |
@@ -63,7 +63,7 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ##### 🧪 `testing` section
 
 | Key | Example | Type | Description |
-|---|---|---:|---|
+|:---:|:---:|:---:|:---:|
 | `batch_size` | `125` | int | Batch size used during **evaluation**. |
 
 ---
@@ -71,7 +71,7 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ##### 🏋️ `training` section
 
 | Key | Example | Type | Description |
-|---|---|---:|---|
+|:---:|:---:|:---:|:---:|
 | `method` | `dapo` | str | Training method. |
 | `random_seed` | `0` | int | Global seed for training. |
 | `max_prompt_len` | `1024` | int | Max input prompt tokens. |
