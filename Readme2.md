@@ -197,6 +197,10 @@ We do the GTMS and ETS main part in verl/workers/actor/dp_actor.py, update_polic
 
 ## 🚀 Start
 
+### 1) Environment Setup
+
+Please follow verl's environment setup in this part[https://github.com/volcengine/verl/blob/main/scripts/install_vllm_sglang_mcore.sh]
+
 ```bash
 bash examples/dapo_trainer/run_qwen3_8b_qwa.sh
 ```
