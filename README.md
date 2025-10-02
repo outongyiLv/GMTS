@@ -117,3 +117,10 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ```bash
 python3 test.py
 ```
+
+| Key | Example | Type | Description |
+|:---:|:---:|:---:|:---:|
+| `model_struct` | `./GMTS/model/Qwen2.5-Math-1.5B` | str | Base model struct. |
+| `saving_path` | `"./GMTS/GMTS-Framework1/result_evaluation/Qwen2.5-math-1.5b-grpo-ETS"` | str | Dict path for saving the evalution result. |
+| `evalution_model_weight_list` | `["/home/zyw/GMTS/GMTS-Framework1/result/ckpt_dir/Qwen2.5-math-1.5b-grpo-ETS/ckpt_max_pass1.pt"]` | List | Model weight list. |
+
