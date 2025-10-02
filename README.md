@@ -7,7 +7,7 @@
 ## ✨ Highlights
 
 - **No VLLM/SGLang required** pure PyTorch and transformer pipeline for training and evaluation.
-- **Minimal dependency constraints ** strict requirements on framework, packages, or CUDA versions.
+- **Minimal dependency constraints** strict requirements on framework, packages, or CUDA versions.
 - **Single-GPU operation** Designed without data/model parallelism, making it practical under limited resources.
 
 > ⚠️ As the framework omits parallelization, **its throughput is lower than verl**. It is best suited for prototype exploration, ablation studies, and quick feasibility checks under resource constraints.
