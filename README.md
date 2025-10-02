@@ -21,24 +21,10 @@
 
 ```bash
 
-https://github.com/xiaolizh1/KTAE.git
-
-# Create and activate a virtual environment
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-
-# Upgrade basics
-pip install -U pip wheel setuptools
-
-# Install PyTorch (choose the right index URL for your CUDA/toolkit)
-# Example for CUDA 12.1:
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-
-# Core utilities (adjust as needed)
-pip install transformers datasets accelerate tqdm numpy pyyaml
-# Optional: visualization & notebooks
-pip install matplotlib jupyter
-# Optional: logging backends
-# pip install wandb tensorboard
+git clone https://github.com/outongyiLv/GMTS.git
+conda create -n GMTS python=3.10 -y
+conda activate GMTS
+cd GMTS
+pip install -r requirements.txt
 
 
