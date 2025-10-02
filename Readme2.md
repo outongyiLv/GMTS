@@ -74,6 +74,147 @@ batch = self.reorganize_batch_by_uid(batch) # ranking the batch
 ```
 
 ## 🔄 Changing (2) GMTS selection
+We do the GTMS and ETS main part in verl/workers/actor/dp_actor.py, update_policy:
+
+```python
+                mini_batch = data # 获取这个mini-batch的data 是什么, 一次每张卡上过多少数据
+
+                if ((doing_entropy_clipping_type=="qw") or (doing_entropy_clipping_type=="qwa")) :  # 需要计算entropy
+
+                    # step1: 分割成小块micro-batch来计算entropy和logp
+                    if has_multi_modal_inputs:
+                        self.gradient_accumulation = self.config.ppo_mini_batch_size // self.config.ppo_micro_batch_size_per_gpu
+                        num_micro_batches = mini_batch.batch.batch_size[0] // self.config.ppo_micro_batch_size_per_gpu
+                        micro_batches = data.select(select_keys, non_tensor_select_keys).chunk(num_micro_batches)
+                    
+                    elif self.config.use_dynamic_bsz:
+                        max_token_len = self.config.ppo_max_token_len_per_gpu * self.ulysses_sequence_parallel_size
+                        micro_batches, _ = rearrange_micro_batches(batch=mini_batch, max_token_len=max_token_len) # 自动分配
+                    
+                    else:
+                        self.gradient_accumulation = self.config.ppo_mini_batch_size // self.config.ppo_micro_batch_size_per_gpu
+                        # split batch into micro_batches
+                        micro_batches = mini_batch.split(self.config.ppo_micro_batch_size_per_gpu)
+
+
+                    
+                    # step2: 计算logp和entropy
+                    all_entropy_now = []
+                    logp = []
+                    
+                    for data in micro_batches:
+                        if isinstance(data, DataProto):
+                            data = {**data.batch.to(torch.cuda.current_device()), **data.non_tensor_batch}
+                        else:
+                            data = data.to(torch.cuda.current_device())  # actor device is cpu when using offload
+                        
+                        with torch.no_grad(): # 这里不计算梯度
+                            micro_entropy, micro_logp = self._forward_micro_batch(micro_batch=data, temperature=temperature)
+
+                        all_entropy_now.append(micro_entropy)
+                        logp.append(micro_logp)
+                    
+                    all_entropy_now = torch.cat(all_entropy_now, dim=0)   # 通常沿 batch 维拼接
+                    logp            = torch.cat(logp, dim=0)
+
+
+                    # step3: qw-qwa's method
+                    if(doing_entropy_clipping_type=="qw"): # 使用qw的方法进行clipping
+                        all_entropy_now_flatten = all_entropy_now.flatten()  # 所有的entropy展开
+                        non_zero_all_entropy_now_flatten = all_entropy_now_flatten[all_entropy_now_flatten!=0] # 去除元素为0的元素, 那些mask的位置
+                        sorted_elements, sorted_indices = torch.sort(non_zero_all_entropy_now_flatten) # 非零元素从小大排序
+                    
+                        if(doing_entropy_clipping_percent==0.0):
+                            clipping_threshold_value = 0.0
+                        
+                        elif(doing_entropy_clipping_percent==1.0):
+                            print("can not do this, because you clip all the data here.")
+                            assert False
+                        
+                        else:
+                            num_to_remove = int(len(non_zero_all_entropy_now_flatten) * doing_entropy_clipping_percent) # 去除多少元素
+                            clipping_threshold_value = sorted_elements[num_to_remove - 1]  # clip掉多少元素, 小于这个值全部clip掉, 只保留大entropy元素
+
+                        # entropy中小于这个阈值位置的地方对应的adv改成0
+                        mini_batch['advantages'] = torch.where(all_entropy_now <= clipping_threshold_value, torch.tensor(0), mini_batch['advantages']) # 小于这个 阈值的entropy全部按照 adv为 0给予， 否则按照正常来给
+
+
+
+
+                    elif(doing_entropy_clipping_type=="qwa"): # 使用我们的办法进行clipping
+
+                        clip_ratio      = self.config.clip_ratio
+                        clip_ratio_low  = self.config.clip_ratio_low if self.config.clip_ratio_low is not None else clip_ratio
+                        clip_ratio_high = self.config.clip_ratio_high if self.config.clip_ratio_high is not None else clip_ratio    
+
+                        theta_old_ratio = (logp - mini_batch['old_log_probs']).exp()  # pi_theta / pi_old 
+
+                        adv = mini_batch['advantages']                                # advantange
+                        
+                        indecated_ratio = torch.full_like(theta_old_ratio, 1.0)       # I_trust
+
+                        mask1 = (theta_old_ratio > 1 + clip_ratio_high) & (adv > 0)
+                        indecated_ratio[mask1] = 0
+
+                        mask2 = (theta_old_ratio < 1 - clip_ratio_low) & (adv < 0)
+                        indecated_ratio[mask2] = 0                                   
+
+
+                        ratio_summary = theta_old_ratio * adv * indecated_ratio
+
+                        # I_trust*pi_theta / pi_old * advantange 
+
+
+
+                        if self.config.use_kl_loss: # 如果在使用grpo的方法
+                            ref_theta_ratio = (mini_batch['ref_log_prob'] - logp).exp() # pi_ref / pi_theta
+                            kl_loss_coef = self.config.kl_loss_coef
+
+                            ratio_summary = ratio_summary + kl_loss_coef * ref_theta_ratio - kl_loss_coef # add kl-div and do the abs here.
+                        
+                        # I_trust * (pi_theta / pi_old) * advantange + kl_loss_coef * (pi_ref / pi_theta) - kl_loss_coef
+                        ratio_summary = abs(ratio_summary) # 加入绝对值
+
+
+                        # 以下开始按照group进行分组上的clipping
+                        assert all_entropy_now.size()[0]%16==0 # 是否整除group_size
+                        number_question = all_entropy_now.size()[0]//16 # 多少个question
+                        print(number_question)
+
+
+                        for i in range(0, number_question, 16):
+                            all_entropy_now_group = all_entropy_now[i:i+16]
+                            ratio_summary_group = ratio_summary[i:i+16]
+                            
+                            all_entropy_now_adv_group = all_entropy_now_group * ratio_summary_group  # 乘上来, 然后再次进行clip
+                            all_entropy_now_flatten_adv_group = all_entropy_now_adv_group.flatten()  # 展开
+
+                            non_zero_all_entropy_now_flatten_adv_group = all_entropy_now_flatten_adv_group[all_entropy_now_flatten_adv_group!=0] # 去除元素为0的元素, 那些mask的位置
+
+                            sorted_elements, sorted_indices = torch.sort(non_zero_all_entropy_now_flatten_adv_group) # 从小大排序
+                            
+                            if(doing_entropy_clipping_percent==0.0):
+                                clipping_threshold_value_group = 0.0
+                            
+                            elif(doing_entropy_clipping_percent==1.0):
+                                print("can not do this, because you clip all the data here.")
+                                assert False
+                            
+                            else:
+                                num_to_remove = int(len(non_zero_all_entropy_now_flatten_adv_group) * doing_entropy_clipping_percent) # 去除多少元素
+                                
+                                if(num_to_remove==0):
+                                    clipping_threshold_value_group = 0
+                                else:
+                                    clipping_threshold_value_group = sorted_elements[num_to_remove - 1]  # clip掉多少元素, 小于这个值全部clip掉
+
+
+
+                            mini_batch['advantages'][i:i+16] = torch.where(all_entropy_now_adv_group <= clipping_threshold_value_group, torch.tensor(0), mini_batch['advantages'][i:i+16]) # 小于这个 阈值的entropy全部按照 adv为 0给予， 否则按照正常来给
+
+```
+
+
 
 
 
