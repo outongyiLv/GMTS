@@ -1,3 +1,3 @@
-# GMTS-Framework1
+# GMTS-Framework2
 
-> Lightweight, single-GPU training & evaluation pipeline for GMTS experiments — **no VLLM/SGLang required**, minimal env constraints, ideal for resource-constrained setups.
+> The framework below is built on verl and reflects our modifications and the associated execution workflow.
