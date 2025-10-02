@@ -1,19 +1,59 @@
-# GMTS
-GMTS: GRADIENT MAGNITUDE-BASED TOKEN SELECTION IMPROVES RLVR TRAINING FOR LLM REASONING
+# GMTS-Framework1
 
-## GMTS Frameworks 
-This repo contains two sub-frameworks, one is based on [VERL](https://github.com/volcengine/verl) and one is based on [GRPO-Zero](https://github.com/policy-gradient/GRPO-Zero):
-- `GMTS-Framework1/` → **GRPO-Zero-GMTS**
-- `GMTS-Framework2/` → **VERL-GMTS**
+> Lightweight, single-GPU training & evaluation pipeline for GMTS experiments — **no VLLM/SGLang required**, minimal env constraints, ideal for quick iterations and resource-constrained setups.
 
-We provide **GMTS-Framework1/** for resource-constrained setups: **it does not require VLLM**, and it can train/test **1.5B and 7B** models with minimal resources, with a simple, easy-to-implement KV-cache.
+---
 
-## Quick Start
-We gave the example for training DAPO/GRPO for `GMTS-Framework1/`, and training DAPO for `GMTS-Framework2/`
+## ✨ Highlights
 
+- **无需 VLLM / SGLang**：纯 PyTorch 训练与测试流程。
+- **对框架、包与 CUDA 版本无强依赖**：更易在不同机器上跑通（建议使用较新的 PyTorch + CUDA 组合以获得更好性能）。
+- **单卡即可运行**：不包含数据/模型并行；在资源有限时尤为友好。
+- **可视化分析**：提供 `logp–entropy`、`logp–gradient-magnitude`、`log-true-gradient-magnitude` 等关系图的分析工具。
+- **上手即用示例**：`example/` 下含简单可复现的 run-example。
+
+> ⚠️ 由于不使用并行化策略，本框架的**吞吐与效率低于 VERL**；适合**原型探索与对比实验**，或在资源紧张时快速验证想法。
+
+---
+
+## 📁 目录结构
+
+.GMTS/
+└─ GMTS-Framework1/
+├─ analyse_tools/
+│ └─ gradient.ipynb # 可视化：logp-entropy / logp-grad 等关系
+├─ example/
+│ ├─ run_example.sh # 训练/测试最小示例（可自定义）
+│ └─ config_example.json # 示例配置（可选）
+├─ test.py # 测试脚本（可定制参数）
+├─ train.py # 训练入口
+├─ gmts/
+│ ├─ data.py # 数据加载/预处理（若适用）
+│ ├─ model.py # 模型构建/加载（HF 或本地）
+│ ├─ trainer.py # 训练循环
+│ └─ methods/
+│ └─ gmts_core.py # GMTS 核心实现（示意）
+└─ README.md
+
+
+
+
+> 你的仓库结构可能与上图略有差异；关键路径以本文档阐述为准。
+
+---
+
+## 🚀 快速开始
+
+### 1) 环境准备（示例）
 ```bash
-cd GMTS-Framework1/
-# training for dapo on Qwen2.5-math-1.5b
-bash example/Qwen2.5-math-1.5b-dapo.yaml
-# training for grpo on  Qwen2.5-math-1.5b
-bash example/Qwen2.5-math-1.5b-grpo.yaml
+# 建议 Python 3.9+
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+pip install -U pip wheel
+# 下面库仅为示例，按需增减；可与本机 CUDA 匹配安装 torch/torchvision
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install transformers datasets accelerate tqdm numpy pyyaml
+pip install matplotlib jupyter
+
+
