@@ -16,7 +16,8 @@
 ## 🚀 Quick Start
 
 ### 1) Environment Setup
-> Python ≥ 3.9 is recommended. There are **no strict constraints** on CUDA or package versions; choose a PyTorch build compatible with your system.
+
+> There are **no strict constraints** on CUDA or package versions; choose a PyTorch build compatible with your system.
 
 ```bash
 # Create and activate a virtual environment
