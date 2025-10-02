@@ -16,32 +16,6 @@
 
 ---
 
-## 📁 目录结构
-
-.GMTS/
-└─ GMTS-Framework1/
-├─ analyse_tools/
-│ └─ gradient.ipynb # 可视化：logp-entropy / logp-grad 等关系
-├─ example/
-│ ├─ run_example.sh # 训练/测试最小示例（可自定义）
-│ └─ config_example.json # 示例配置（可选）
-├─ test.py # 测试脚本（可定制参数）
-├─ train.py # 训练入口
-├─ gmts/
-│ ├─ data.py # 数据加载/预处理（若适用）
-│ ├─ model.py # 模型构建/加载（HF 或本地）
-│ ├─ trainer.py # 训练循环
-│ └─ methods/
-│ └─ gmts_core.py # GMTS 核心实现（示意）
-└─ README.md
-
-
-
-
-> 你的仓库结构可能与上图略有差异；关键路径以本文档阐述为准。
-
----
-
 ## 🚀 快速开始
 
 ### 1) 环境准备（示例）
