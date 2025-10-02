@@ -32,3 +32,4 @@ pip install -r requirements.txt
 cd GMTS/GMTS-Framework1
 python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ```
+#### ⚙️ Common Arguments & Meanings
