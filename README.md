@@ -46,3 +46,12 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 | `old_model_device` | `cuda:0` | str | Device for the old model (can be the same as `device` if memory allows). |
 | `ref_model_device` | `cuda:0` | str | Device for the **reference** model used in KL for GRPO (can be the same as `device` if memory allows). |
 
+##### 📚 `data` section
+
+| Key | Example | Type | Description |
+|---|---|---:|---|
+| `data_name` | `math` | str | Dataset used for routing or logging. |
+| `training_path` | `./GMTS/GMTS-Framework1/test_data/math-500` | str | Directory or file path to training data. |
+| `testing_path` | `./GMTS/GMTS-Framework1/test_data/math-500` | str | Directory or file path to testing data. |
+| `test_size` | `500` | int | Number of test examples to load/evaluate. |
+
