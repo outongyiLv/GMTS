@@ -112,7 +112,8 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 ---
 
 ### 3) Evaluation
-> Before running `test.py`
+> Before running `test.py`, make sure to change these parameters:
+
 ```bash
 python3 test.py
 ```
