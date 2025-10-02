@@ -68,7 +68,10 @@ We observed that, when verl enters parallel training, it does not strictly proce
         
         return reorganized
 ```
-
+and doing this after calculating the advantages:
+```python
+batch = self.reorganize_batch_by_uid(batch) # 排序batch
+```
 
 
 
