@@ -20,11 +20,16 @@
 > There are **no strict constraints** on CUDA or package versions; choose a PyTorch build compatible with your system.
 
 ```bash
-
 git clone https://github.com/outongyiLv/GMTS.git
 conda create -n GMTS python=3.10 -y
 conda activate GMTS
 cd GMTS/GMTS-Framework1
 pip install -r requirements.txt
+```
 
-
+### 2) Running GMTS on Qwen2.5-math-1.5B
+> 
+```bash
+cd GMTS/GMTS-Framework1
+python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
+```
