@@ -12,23 +12,20 @@ We observed that, when verl enters parallel training, it does not strictly proce
         reorganized = copy.deepcopy(batch) # copy
 
         question_uids = batch.non_tensor_batch["uid"]
-        assert len(set(question_uids))==self.config.data.train_batch_size # 判别, 是不是 question_number * group_size大小的
+        assert len(set(question_uids))==self.config.data.train_batch_size 
         
-        group_indices = defaultdict(list) # 第几个uid, 对应的是哪些个数据
+        group_indices = defaultdict(list)
         for idx, uid in enumerate(question_uids):
             group_indices[uid].append(idx)
         
-        assert all(len(indices) == self.config.actor_rollout_ref.rollout.n for indices in group_indices.values()) # 再次确保 是不是 question_number * group_size大小的
+        assert all(len(indices) == self.config.actor_rollout_ref.rollout.n for indices in group_indices.values())
 
-        # 下面要按照batch的内容进行拼接
         batch_batch_keys = batch.batch.keys()
         batch_non_tensor_batch_keys = batch.non_tensor_batch.keys()
         batch_meta_info_keys = batch.meta_info.keys()
 
-
-        # 首先处理tensor部分
         for keys in batch_batch_keys:
-            data = batch.batch[keys] # 获取这个tensor-data是什么
+            data = batch.batch[keys] 
             processed_data = []
             
             for group_keys in group_indices.keys():
@@ -38,9 +35,8 @@ We observed that, when verl enters parallel training, it does not strictly proce
             
             processed_data = torch.cat(processed_data, dim=0)
             
-            reorganized.batch[keys] = processed_data # 更改keys对应的值
+            reorganized.batch[keys] = processed_data 
         
-
         for keys in batch_non_tensor_batch_keys:
             
             data = batch.non_tensor_batch[keys]
@@ -52,9 +48,8 @@ We observed that, when verl enters parallel training, it does not strictly proce
                 processed_data.append(group_data)
 
             processed_data = np.concatenate(processed_data, axis=0)  
-            reorganized.non_tensor_batch[keys] = processed_data # 更改keys对应的值
+            reorganized.non_tensor_batch[keys] = processed_data 
         
-
         for keys in batch_meta_info_keys:
             
             if(keys!='temperature'):
@@ -66,7 +61,7 @@ We observed that, when verl enters parallel training, it does not strictly proce
                     group_data = [data[item] for item in group_list]
                     processed_data.extend(group_data)
             
-                reorganized.meta_info[keys] = processed_data # 更改keys对应的值
+                reorganized.meta_info[keys] = processed_data 
             
             else:
                 continue
