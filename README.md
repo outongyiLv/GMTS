@@ -13,18 +13,28 @@
 > ⚠️ As the framework omits parallelization, **its throughput is lower than verl**. It is best suited for prototype exploration, ablation studies, and quick feasibility checks under resource constraints.
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1) 环境准备（示例）
+### 1) Environment Setup
+> Python ≥ 3.9 is recommended. There are **no strict constraints** on CUDA or package versions; choose a PyTorch build compatible with your system.
+
 ```bash
-# 建议 Python 3.9+
+# Create and activate a virtual environment
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 
-pip install -U pip wheel
-# 下面库仅为示例，按需增减；可与本机 CUDA 匹配安装 torch/torchvision
+# Upgrade basics
+pip install -U pip wheel setuptools
+
+# Install PyTorch (choose the right index URL for your CUDA/toolkit)
+# Example for CUDA 12.1:
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# Core utilities (adjust as needed)
 pip install transformers datasets accelerate tqdm numpy pyyaml
+# Optional: visualization & notebooks
 pip install matplotlib jupyter
+# Optional: logging backends
+# pip install wandb tensorboard
 
 
