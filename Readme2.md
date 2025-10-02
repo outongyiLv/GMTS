@@ -73,6 +73,9 @@ and doing this after calculating the advantages:
 batch = self.reorganize_batch_by_uid(batch) # ranking the batch
 ```
 
+## 🔄 Changing (2) GMTS selection
+
+
 
 
 
