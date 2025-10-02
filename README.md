@@ -72,12 +72,14 @@ python3 train.py --config ./example/Qwen2.5-math-1.5b-grpo-GMTS.yaml
 
 | Key | Example | Type | Description |
 |---|---|---:|---|
-| `method` | `dapo` | str | Training method/scheme (e.g., `dapo`, `gmts`). |
-| `random_seed` | `0` | int | Global RNG seed for reproducibility. |
-| `max_prompt_len` | `1024` | int | Max input/prompt tokens. |
-| `max_gen_len` | `2048` | int | Max generated/output tokens per sample. |
-| `batch_size` | `1024` | int | **Global training batch** (logical total per optimizer step; often decomposed via micro/mini batches). |
-| `num_questions_per_batch` | `64` | int | Number of questions/samples per **outer step** (scheduler unit). |
+| `method` | `dapo` | str | Training method. |
+| `random_seed` | `0` | int | Global seed for training. |
+| `max_prompt_len` | `1024` | int | Max input prompt tokens. |
+| `max_gen_len` | `2048` | int | Max generated output tokens per sample. |
+| `batch_size` | `1024` | int | Global training dataset number Group number is `batch_size`//`num_questions_per_batch`. |
+| `num_questions_per_batch` | `64` | int | Number of questions per **outer step** (scheduler unit). |
+
+
 | `rollout_mini_batch` | `16` | int | Questions per rollout chunk (sampling/inference chunk size). |
 | `mini_batch_size` | `64` | int | Questions per **update** chunk (optimizer update granularity). |
 | `micro_batch_size` | `4` | int | Per-GPU micro-batch size for gradient accumulation. |
