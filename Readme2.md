@@ -70,8 +70,9 @@ We observed that, when verl enters parallel training, it does not strictly proce
 ```
 and doing this after calculating the advantages:
 ```python
-batch = self.reorganize_batch_by_uid(batch) # 排序batch
+batch = self.reorganize_batch_by_uid(batch) # ranking the batch
 ```
+
 
 
 
