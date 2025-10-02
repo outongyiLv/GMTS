@@ -4,7 +4,7 @@
 
 ## 🔄 Changing (1) Data reordering
 
-We observed that, when verl enters parallel training, it does not strictly proceed group by group. Instead, it typically computes the advantage jointly and then mixes the data for gradient computation. As a first step, we implemented data reordering:
+We observed that, when verl enters parallel training, it does not strictly proceed group by group. Instead, it typically computes the advantage jointly and then mixes the data for gradient computation. As a first step, we implemented data reordering in verl/trainer/ppo/ray_trainer.py:
 
 ```python
     def reorganize_batch_by_uid(self, batch):
