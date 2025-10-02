@@ -6,7 +6,7 @@
 
 We observed that, when verl enters parallel training, it does not strictly proceed group by group. Instead, it typically computes the advantage jointly and then mixes the data for gradient computation. As a first step, we implemented data reordering:
 
-···python
+```python
     def reorganize_batch_by_uid(self, batch):
         import copy
         reorganized = copy.deepcopy(batch) # copy
